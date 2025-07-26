@@ -4,14 +4,15 @@ services:
     hostname: crystalline
     restart: unless-stopped
     volumes:
-      - ./bootstrap.json:/config/bootstrap.json:ro
-      - crystalline_data:/data
-      - crystalline_config:/config
       - type: tmpfs
         target: /cache
-      - ./rulesets:/rulesets:ro
+      - crystalline_data:/data
+      # - crystalline_config:/config
+      - ./compose/config:/config
+      - ./compose/bootstrap.json:/config/bootstrap.json:ro
+      - ./compose/rulesets:/rulesets:ro
     ports:
-      - 8080:8080
+      - 8099:8080
     environment:
       - CRYSTALLINE_BOOTSTRAP_CONFIG=/config/bootstrap.json
   fluentbit:
@@ -19,10 +20,10 @@ services:
     ports:
       - 5140:5140
     volumes:
-      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
+      - ./compose/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
       - fluentbit_state:/state
 
 volumes:
   crystalline_data:
-  crystalline_config:
+  # crystalline_config:
   fluentbit_state:

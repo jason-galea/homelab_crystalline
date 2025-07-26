@@ -1,0 +1,46 @@
+# ID - must be a unique UUID, no version requirement
+id = "60f8d95f-9bfb-4ac3-955e-142920a378c4"
+# Name - required and will be included in logs and the alert text
+name = "SSH Logins"
+# Description - optional, but recommended to provide context for the alert
+description = "Detect successful SSH logins from syslog."
+# Query - this is the search that will be executed. All returned rows will trigger an alert
+query = '''
+select syslog(accepted sshd)
+| extract message = /^\s?\w+\s(?<method>[^\s]+)\s\w+\s(?<user>[^\s]+)\s\w+\s(?<remote>[^\s]+)/
+| eval message = concat("Login for user '", user, "' using ", method, " from ", remote)
+| fields _time message
+'''
+
+# The interval block defines how often the query will be run.
+# Intervals will be aligned to the interval sized boundary.
+# For example: if you have an interval of 15 seconds and your search runs at 09:37:24, it will run for the span 09:37:15 - 09:37:30. 
+# The search will be executed COMMIT_INTERVAL seconds after the end of the interval period, so with commit interval set to 5 seconds
+# this is how it would behave:
+# Search for 00:00:00-00:00:15 runs at 00:00:20
+# Search for 00:00:15-00:00:30 runs at 00:00:35
+# Search for 00:00:30-00:00:45 runs at 00:00:50
+# This delay means that all events ingested during the 15 second interval will have time to be flushed to disk and made available for searching.
+[interval]
+seconds = 15
+
+# The window block defines the time span that the scheduled search will look for events in.
+# 
+# The relative window below means that it will search 30 minutes before the end of the interval period.
+# However even though the search runs every 15 seconds there won't be duplicate results due to the 
+# default behavior of filtering based on the event ingest time, this means that an event could be ingested up 
+# to 30 minutes late and still be alerted on.
+[window]
+minutes = 30
+
+
+# The ingest window filters for events that were ingested into crystalline within the specified range
+# This block is optional and will default to match the query interval if not provided.
+#
+# [ingest_window]
+# seconds = 15
+
+# List of alert blocks that will be triggered when this rule matches events
+# The id must match 1 or more alert definitions in alerts.toml
+[[alert]]
+id = "debug"

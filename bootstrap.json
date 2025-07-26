@@ -1,0 +1,21 @@
+{
+	"indices": [
+		{
+			"id": "65e636bb-dfa5-48b1-a827-162ab1b2f816",
+			"name": "syslog",
+			"storage_type": "Directory",
+			"retention": {
+				"type": "Simple",
+				"buckets": 30
+			}
+		}
+	],
+	"inputs": [
+		{
+			"id": "7475e32f-ca86-4324-8945-4fd23401d9ec",
+			"label": "syslog_fluentbit",
+			"index": "65e636bb-dfa5-48b1-a827-162ab1b2f816",
+			"token_required": false
+		}
+	]
+}

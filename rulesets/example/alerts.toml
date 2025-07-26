@@ -1,0 +1,8 @@
+# This file contains the alerting configuration for all rules in this ruleset.
+# This example contains a single alert which will simply output to stdout when triggered.
+
+[[alert]]
+# The id field is required and must be unique, this is the value that you will use in your
+# rule definition to route events here
+id = "debug"
+type = "stdout"

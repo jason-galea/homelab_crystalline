@@ -1,21 +1,48 @@
 {
-	"indices": [
-		{
-			"id": "65e636bb-dfa5-48b1-a827-162ab1b2f816",
-			"name": "syslog",
-			"storage_type": "Directory",
-			"retention": {
-				"type": "Simple",
-				"buckets": 30
-			}
-		}
-	],
-	"inputs": [
-		{
-			"id": "7475e32f-ca86-4324-8945-4fd23401d9ec",
-			"label": "syslog_fluentbit",
-			"index": "65e636bb-dfa5-48b1-a827-162ab1b2f816",
-			"token_required": false
-		}
-	]
+  "indices": [
+    {
+      "id": "01984615-eedb-7132-bb5a-b03ff8b308ec",
+      "name": "systemd",
+      "retention": {
+        "buckets": 30,
+        "type": "Simple"
+      },
+      "storage_type": "Directory"
+    },
+    {
+      "id": "01984616-0c27-7b62-aa93-5686538bac39",
+      "name": "docker",
+      "retention": {
+        "buckets": 30,
+        "type": "Simple"
+      },
+      "storage_type": "Directory"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "01984616-d005-7f43-9ec5-fd613503ca61",
+      "index": "01984615-eedb-7132-bb5a-b03ff8b308ec",
+      "label": "vector_systemd",
+      "time_extractor": {
+        "field": "timestamp",
+        "format": "%+",
+        "type": "Field"
+      },
+      "token": "0b3e0dbd-715e-4856-97e6-95f568b88727",
+      "token_required": true
+    },
+    {
+      "id": "01984617-e9c2-7b91-a912-3efb2dd868e8",
+      "index": "01984616-0c27-7b62-aa93-5686538bac39",
+      "label": "vector_docker",
+      "time_extractor": {
+        "field": "timestamp",
+        "format": "%+",
+        "type": "Field"
+      },
+      "token": "fd67de16-e03d-4410-a98d-be284f1a5e41",
+      "token_required": true
+    }
+  ]
 }

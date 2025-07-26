@@ -8,22 +8,22 @@ services:
         target: /cache
       - crystalline_data:/data
       # - crystalline_config:/config
-      - ./compose/config:/config
+      - ./config/:/config/
       - ./compose/bootstrap.json:/config/bootstrap.json:ro
-      - ./compose/rulesets:/rulesets:ro
+      - ./compose/rulesets/:/rulesets/:ro
     ports:
       - 8099:8080
     environment:
       - CRYSTALLINE_BOOTSTRAP_CONFIG=/config/bootstrap.json
-  fluentbit:
-    image: fluent/fluent-bit
-    ports:
-      - 5140:5140
-    volumes:
-      - ./compose/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
-      - fluentbit_state:/state
+  # fluentbit:
+  #   image: fluent/fluent-bit
+  #   ports:
+  #     - 5140:5140
+  #   volumes:
+  #     - ./compose/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
+  #     - fluentbit_state:/state
 
 volumes:
   crystalline_data:
   # crystalline_config:
-  fluentbit_state:
+  # fluentbit_state:
